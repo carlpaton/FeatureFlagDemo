@@ -1,0 +1,51 @@
+﻿@using Microsoft.FeatureManagement
+@inject IFeatureManager FeatureManager
+@addTagHelper *, Microsoft.FeatureManagement.AspNetCore
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+
+    <feature name="HappyHolidaysFlag">
+        <h2>Happy holidays!</h2>
+        <hr />
+    </feature>
+    <div class="small">@DateTime.Now.ToLocalTime().ToString()</div>
+
+    @if (await FeatureManager.IsEnabledAsync("NewFeatureFlag"))
+    {
+        <p>Hey you can see `NewFeatureFlag`</p>
+
+        <br />
+        <a asp-action="NewFeature">Go to the new feature!</a>
+    }
+
+    <feature name="NewFeatureFlag">
+        <hr />
+
+        Sweet tag helper for Razor :D
+
+        <a asp-action="NewFeature">Go to the new feature!</a>
+    </feature>
+
+    <feature name="NewFeatureFlag2">
+        <hr />
+        <p>You can see this because `NewFeatureFlag2` was set to true in `Program.cs` with `Environment.SetEnvironmentVariable`</p>
+    </feature>
+
+    <feature name="BrowserFlag">
+        <hr />
+        XXXXXXXXXXXXXXXXXXXXXXX
+        <p>You can see this because `BrowserFeatureFilter` was evaluated as true for `BrowserFlag`.</p>
+        <br />
+        <a asp-action="BrowserNewFeature">Go to the new feature!</a>
+        XXXXXXXXXXXXXXXXXXXXXXX
+    </feature>
+
+    <feature name="RandomFlag">
+        <hr />
+        <p>You can see this because `PercentageFilter` was evaluated as true for `RandomFlag`.</p>
+    </feature>
+</div>
